@@ -1,7 +1,7 @@
 require_relative 'jsonable'
 
 class Player < JSONable
-  def initialize(playerName)
+  def initialize(playerName = nil)
     @player_name = playerName
     @stamina = 10
     @health = 10
@@ -13,5 +13,5 @@ class Player < JSONable
     @stamina = @stamina - 1
     @stamina = [0, @stamina].min, 10
     @stamina = [10, @stamina].max
-  end
+  end  
 end

@@ -72,6 +72,10 @@ puts "#{json_test}"
 $turn = Turn.new $p1_move, $p2_move, $p1_outcome, $p2_outcome
 json_test =  "#{$turn.to_json}"
 puts "#{json_test}"
+$turn = Turn.new
+$turn.from_json! json_test
+json_test =  "#{$turn.to_json}"
+puts "#{json_test}"
 
 #
 # puts "Starting program #{ARGV[0]} #{ARGV[3]}"
