@@ -78,5 +78,41 @@ describe "Exchange" do
         player1.health.must_equal 8
       end
     end
+
+    (MoveCode::ALL_MOVES - [MoveCode::ILLEGAL_MOVE]).each do |move|
+      it "will always drain stamina when ducking against #{move}" do
+        Exchange.perform(player1, player2, Move.new(MoveCode::DUCK), Move.new(move))
+        player1.stamina.must_equal 9
+      end
+    end
+
+    (MoveCode::EVASIVE_MOVES + [MoveCode::DUCK]).each do |move|
+      it "will not drain stamina for using #{move} against an illegal move" do
+        Exchange.perform(player1, player2, Move.new(move), Move.new(MoveCode::ILLEGAL_MOVE))
+        player1.stamina.must_equal 10
+      end
+    end
+
+    MoveCode::JAB_ATTACKS.each do |attack|
+      it "will award a star for ducking against #{attack}" do
+        Exchange.perform(player1, player2, Move.new(MoveCode::DUCK), Move.new(attack))
+        player1.stars.must_equal 1
+      end
+    end
+
+    (MoveCode::ALL_MOVES - MoveCode::JAB_ATTACKS).each do |move|
+      it "will not award stars for ducking against non-jab moves: #{move}" do
+        Exchange.perform(player1, player2, Move.new(MoveCode::DUCK), Move.new(move))
+        player1.stars.must_equal 0
+      end
+    end
+
+    (MoveCode::BODY_BLOW_ATTACKS).each do |attack|
+      it "will deal damage to ducking opponents when using #{attack} and award a star" do
+        Exchange.perform(player1, player2, Move.new(attack), Move.new(MoveCode::DUCK))
+        player2.health.must_equal 8
+        player1.stars.must_equal 1
+      end
+    end
   end
 end

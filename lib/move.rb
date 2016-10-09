@@ -25,4 +25,16 @@ class Move < JSONable
   def is_uppercut?
     @move_code.eql? MoveCode::UPPERCUT
   end
+
+  def is_duck?
+    @move_code.eql? MoveCode::DUCK
+  end
+
+  def is_body_blow?
+    MoveCode::BODY_BLOW_ATTACKS.include? @move_code
+  end
+
+  def is_jab?
+    MoveCode::JAB_ATTACKS.include? @move_code
+  end
 end
