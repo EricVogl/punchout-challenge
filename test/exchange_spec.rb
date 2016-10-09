@@ -46,6 +46,14 @@ describe "Exchange" do
       end
     end
 
+    MoveCode::EVASIVE_MOVES.each do |evade|
+      it "will not drain stamina or award stars for defending against an evasive move: #{evade}" do
+        Exchange.perform(player1, player2, Move.new(MoveCode::DEFEND), Move.new(evade))
+        player1.stamina.must_equal 10
+        player1.stars.must_equal 0
+      end
+    end
+
     (MoveCode::ALL_MOVES - [MoveCode::DEFEND, MoveCode::DUCK]).each do |move|
       it "will deal five damage when uppercutting against any non-defend or non-duck move" do
         Exchange.perform(player1, player2, Move.new(MoveCode::UPPERCUT), Move.new(move))
