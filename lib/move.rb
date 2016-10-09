@@ -1,0 +1,17 @@
+require_relative 'move_code'
+require_relative 'jsonable'
+
+class Move < JSONable
+  def initialize(move_code = nil)
+    @move_code = move_code
+  end
+
+  def is_basic_attack?
+    return [
+      MoveCode::JAB_LEFT,
+      MoveCode::JAB_RIGHT,
+      MoveCode::LEFT_BODY_BLOW,
+      MoveCode::RIGHT_BODY_BLOW
+    ].include? @move_code
+  end
+end
