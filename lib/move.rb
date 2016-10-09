@@ -37,4 +37,16 @@ class Move < JSONable
   def is_jab?
     MoveCode::JAB_ATTACKS.include? @move_code
   end
+
+  def is_left_attack?
+    MoveCode::LEFT_ATTACKS.include? @move_code
+  end
+
+  def is_right_attack?
+    MoveCode::RIGHT_ATTACKS.include? @move_code
+  end
+
+  def is?(move_code)
+    @move_code.eql? move_code
+  end
 end

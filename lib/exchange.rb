@@ -11,6 +11,14 @@ class Exchange
     player2.uppercut! if move2.is_uppercut?
     player1.award_star! if move1.is_duck? && move2.is_jab?
     player2.award_star! if move2.is_duck? && move1.is_jab?
+    player1.award_star! if move1.is?(MoveCode::DODGE_LEFT) && move2.is_right_attack?
+    player2.award_star! if move2.is?(MoveCode::DODGE_LEFT) && move1.is_right_attack?
+    player1.award_star! if move1.is?(MoveCode::DODGE_RIGHT) && move2.is_left_attack?
+    player2.award_star! if move2.is?(MoveCode::DODGE_RIGHT) && move1.is_left_attack?
+    player1.take_hit! if move1.is?(MoveCode::DODGE_LEFT) && move2.is_left_attack?
+    player2.take_hit! if move2.is?(MoveCode::DODGE_LEFT) && move1.is_left_attack?
+    player1.take_hit! if move1.is?(MoveCode::DODGE_RIGHT) && move2.is_right_attack?
+    player2.take_hit! if move2.is?(MoveCode::DODGE_RIGHT) && move1.is_right_attack?
 
     if move1.is_basic_attack? && move2.is_basic_attack?
       player1.take_hit!

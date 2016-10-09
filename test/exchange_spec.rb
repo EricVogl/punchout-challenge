@@ -114,5 +114,37 @@ describe "Exchange" do
         player1.stars.must_equal 1
       end
     end
+
+    (MoveCode::LEFT_ATTACKS).each do |attack|
+      it "will award a star for successfully dodging a left attack: #{attack}" do
+        Exchange.perform(player1, player2, Move.new(MoveCode::DODGE_RIGHT), Move.new(attack))
+        player1.health.must_equal 10
+        player1.stars.must_equal 1
+      end
+    end
+
+    (MoveCode::LEFT_ATTACKS).each do |attack|
+      it "will deal damage for failing to dodge a left attack: #{attack}" do
+        Exchange.perform(player1, player2, Move.new(MoveCode::DODGE_LEFT), Move.new(attack))
+        player1.health.must_equal 8
+        player1.stars.must_equal 0
+      end
+    end
+
+    (MoveCode::RIGHT_ATTACKS).each do |attack|
+      it "will award a star for successfully dodging a right attack: #{attack}" do
+        Exchange.perform(player1, player2, Move.new(MoveCode::DODGE_LEFT), Move.new(attack))
+        player1.health.must_equal 10
+        player1.stars.must_equal 1
+      end
+    end
+
+    (MoveCode::RIGHT_ATTACKS).each do |attack|
+      it "will deal damage for failing to dodge a right attack: #{attack}" do
+        Exchange.perform(player1, player2, Move.new(MoveCode::DODGE_RIGHT), Move.new(attack))
+        player1.health.must_equal 8
+        player1.stars.must_equal 0
+      end
+    end
   end
 end
