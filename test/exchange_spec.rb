@@ -45,5 +45,30 @@ describe "Exchange" do
         player2.health.must_equal 10
       end
     end
+
+    (MoveCode::ALL_MOVES - [MoveCode::DEFEND, MoveCode::DUCK]).each do |move|
+      it "will deal five damage when uppercutting against any non-defend or non-duck move" do
+        Exchange.perform(player1, player2, Move.new(MoveCode::UPPERCUT), Move.new(move))
+        player2.health.must_equal 5
+      end
+    end
+
+    it "will deal two damage when uppercutting a defending opponent" do
+      Exchange.perform(player1, player2, Move.new(MoveCode::UPPERCUT), Move.new(MoveCode::DEFEND))
+      player2.health.must_equal 8
+    end
+
+    it "will take away three stars when uppercutting" do
+      player1.stars = 3
+      Exchange.perform(player1, player2, Move.new(MoveCode::UPPERCUT), Move.new(MoveCode::ILLEGAL_MOVE))
+      player1.stars.must_equal 0
+    end
+
+    MoveCode::BASIC_ATTACKS.each do |attack|
+      it "will still deal damage to an uppercutting opponent when doing a basic attack: #{attack}" do
+        Exchange.perform(player1, player2, Move.new(MoveCode::UPPERCUT), Move.new(attack))
+        player1.health.must_equal 8
+      end
+    end
   end
 end

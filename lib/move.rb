@@ -21,4 +21,8 @@ class Move < JSONable
   def is_defensive?
     @move_code.eql? MoveCode::DEFEND
   end
+
+  def is_uppercut?
+    @move_code.eql? MoveCode::UPPERCUT
+  end
 end

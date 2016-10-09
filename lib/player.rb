@@ -1,7 +1,8 @@
 require_relative 'jsonable'
 
 class Player < JSONable
-  attr_reader :stamina, :health, :stars, :scores
+  attr_reader :stamina, :health, :scores
+  attr_accessor :stars
 
   def initialize(playerName = nil)
     @player_name = playerName
@@ -28,5 +29,14 @@ class Player < JSONable
   def award_star!
     @stars += 1
     @stars = [[3, @stars].min, 0].max
+  end
+
+  def uppercut!
+    @stars -= 3
+    @stars = [[3, @stars].min, 0].max
+  end
+
+  def take_big_hit!
+    @health -= 5
   end
 end
