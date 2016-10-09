@@ -7,12 +7,7 @@ class Move < JSONable
   end
 
   def is_basic_attack?
-    return [
-      MoveCode::JAB_LEFT,
-      MoveCode::JAB_RIGHT,
-      MoveCode::LEFT_BODY_BLOW,
-      MoveCode::RIGHT_BODY_BLOW
-    ].include? @move_code
+    MoveCode::BASIC_ATTACKS.include? @move_code
   end
 
   def illegal?

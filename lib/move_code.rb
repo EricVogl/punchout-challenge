@@ -9,4 +9,6 @@ module MoveCode
   DUCK = "DUCK"
   UPPERCUT = "UPPERCUT"
   ILLEGAL_MOVE = "ILLEGAL_MOVE"
+
+  BASIC_ATTACKS = [MoveCode::JAB_LEFT, MoveCode::JAB_RIGHT, MoveCode::LEFT_BODY_BLOW, MoveCode::RIGHT_BODY_BLOW]
 end
