@@ -3,57 +3,41 @@ require_relative 'player'
 
 class Exchange
   def self.perform(player1, player2, move1, move2)
-    player1.dodge! if move1.is_evasive? && !move2.illegal?
-    player2.dodge! if move2.is_evasive? && !move1.illegal?
-    player1.defend! if move1.is_defensive? && !move2.is_evasive?
-    player2.defend! if move2.is_defensive? && !move1.is_evasive?
-    player1.uppercut! if move1.is_uppercut?
-    player2.uppercut! if move2.is_uppercut?
-    player1.award_star! if move1.is_duck? && move2.is_jab?
-    player2.award_star! if move2.is_duck? && move1.is_jab?
-    player1.award_star! if move1.is?(MoveCode::DODGE_LEFT) && move2.is_right_attack?
-    player2.award_star! if move2.is?(MoveCode::DODGE_LEFT) && move1.is_right_attack?
-    player1.award_star! if move1.is?(MoveCode::DODGE_RIGHT) && move2.is_left_attack?
-    player2.award_star! if move2.is?(MoveCode::DODGE_RIGHT) && move1.is_left_attack?
-    player1.take_hit! if move1.is?(MoveCode::DODGE_LEFT) && move2.is_left_attack?
-    player2.take_hit! if move2.is?(MoveCode::DODGE_LEFT) && move1.is_left_attack?
-    player1.take_hit! if move1.is?(MoveCode::DODGE_RIGHT) && move2.is_right_attack?
-    player2.take_hit! if move2.is?(MoveCode::DODGE_RIGHT) && move1.is_right_attack?
+    resolve_for(player1, player2, move1, move2)
+    resolve_for(player2, player1, move2, move1)
+  end
 
-    if move1.is_basic_attack? && move2.is_basic_attack?
-      player1.take_hit!
-      player2.take_hit!
-    elsif move1.is_basic_attack? && move2.illegal?
-      player2.take_hit!
-    elsif move1.illegal? && move2.is_basic_attack?
-      player1.take_hit!
-    elsif move1.is_defensive? && move2.is_basic_attack?
-      player1.award_star!
-    elsif move1.is_basic_attack? && move2.is_defensive?
-      player2.award_star!
-    elsif move1.is_uppercut?
-      if move2.is_defensive?
-        player2.take_hit!
-      elsif !move2.is_defensive? && !move2.eql?(MoveCode::DUCK)
-        player2.take_big_hit!
-        player1.take_hit! if move2.is_basic_attack?
+  private
+
+  # this method resolves the outcome from the perspective of "player"
+  # call it twice and swap the parameters to resolve both players
+  # this method helps reduce duplicate logic
+
+  def self.resolve_for(player, opponent, player_move, opp_move)
+    player.dodge! if player_move.is_evasive? && !opp_move.illegal?
+    player.defend! if player_move.is_defensive? && !opp_move.is_evasive?
+    player.uppercut! if player_move.is_uppercut?
+    player.award_star! if player_move.is_duck? && opp_move.is_jab?
+    player.award_star! if player_move.is?(MoveCode::DODGE_LEFT) && opp_move.is_right_attack?
+    player.award_star! if player_move.is?(MoveCode::DODGE_RIGHT) && opp_move.is_left_attack?
+    player.take_hit! if player_move.is?(MoveCode::DODGE_LEFT) && opp_move.is_left_attack?
+    player.take_hit! if player_move.is?(MoveCode::DODGE_RIGHT) && opp_move.is_right_attack?
+
+    if player_move.is_basic_attack? && (opp_move.is_basic_attack? || opp_move.illegal?)
+      opponent.take_hit!
+    elsif player_move.is_defensive? && opp_move.is_basic_attack?
+      player.award_star!
+    elsif player_move.is_uppercut?
+      if opp_move.is_defensive?
+        opponent.take_hit!
+      elsif !opp_move.is_defensive? && !opp_move.eql?(MoveCode::DUCK)
+        opponent.take_big_hit!
+        player.take_hit! if opp_move.is_basic_attack?
       end
-    elsif move2.is_uppercut?
-      if move1.is_defensive?
-        player1.take_hit!
-      elsif !move1.is_defensive? && !move1.eql?(MoveCode::DUCK)
-        player1.take_big_hit!
-        player2.take_hit! if move1.is_basic_attack?
-      end
-    elsif move1.is_body_blow?
-      if move2.is_duck?
-        player2.take_hit!
-        player1.award_star!
-      end
-    elsif move2.is_body_blow?
-      if move1.is_duck?
-        player1.take_hit!
-        player2.award_star!
+    elsif player_move.is_body_blow?
+      if opp_move.is_duck?
+        opponent.take_hit!
+        player.award_star!
       end
     end
   end
