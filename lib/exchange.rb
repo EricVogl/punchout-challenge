@@ -15,7 +15,7 @@ class Exchange
 
   def self.resolve_for(player, opponent, player_move, opp_move)
     player.dodge! if player_move.is_evasive? && !opp_move.illegal?
-    player.defend! if player_move.is_defensive? && !opp_move.is_evasive?
+    player.defend! if player_move.is_defensive? && !opp_move.is_evasive? && !opp_move.is_defensive?
     player.uppercut! if player_move.is_uppercut?
     player.award_star! if player_move.is_duck? && opp_move.is_jab?
     player.award_star! if player_move.is?(MoveCode::DODGE_LEFT) && opp_move.is_right_attack?

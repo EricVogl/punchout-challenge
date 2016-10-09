@@ -146,5 +146,17 @@ describe "Exchange" do
         player1.stars.must_equal 0
       end
     end
+
+    [MoveCode::DEFEND, MoveCode::ILLEGAL_MOVE].each do |move|
+      it "will do nothing if both players choose: #{move}" do
+        Exchange.perform(player1, player2, Move.new(move), Move.new(move))
+        player1.health.must_equal 10
+        player1.stamina.must_equal 10
+        player1.stars.must_equal 0
+        player2.health.must_equal 10
+        player2.stamina.must_equal 10
+        player2.stars.must_equal 0
+      end
+    end
   end
 end
