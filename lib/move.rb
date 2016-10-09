@@ -11,6 +11,14 @@ class Move < JSONable
   end
 
   def illegal?
-    return @move_code.eql? MoveCode::ILLEGAL_MOVE
+    @move_code.eql? MoveCode::ILLEGAL_MOVE
+  end
+
+  def is_evasive?
+    MoveCode::EVASIVE_MOVES.include? @move_code
+  end
+
+  def is_defensive?
+    @move_code.eql? MoveCode::DEFEND
   end
 end

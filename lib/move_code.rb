@@ -11,4 +11,5 @@ module MoveCode
   ILLEGAL_MOVE = "ILLEGAL_MOVE"
 
   BASIC_ATTACKS = [MoveCode::JAB_LEFT, MoveCode::JAB_RIGHT, MoveCode::LEFT_BODY_BLOW, MoveCode::RIGHT_BODY_BLOW]
+  EVASIVE_MOVES = [MoveCode::DODGE_LEFT, MoveCode::DODGE_RIGHT, MoveCode::DUCK]
 end

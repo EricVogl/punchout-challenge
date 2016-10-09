@@ -23,6 +23,27 @@ describe "Exchange" do
         player2.health.must_equal 8
       end
     end
-  end
 
+    MoveCode::EVASIVE_MOVES.each do |evasive1|
+      MoveCode::EVASIVE_MOVES.each do |evasive2|
+        it "will drain stamina and not deal damage if both players dodge: #{evasive1} vs #{evasive2}" do
+          Exchange.perform(player1, player2, Move.new(evasive1), Move.new(evasive2))
+          player1.health.must_equal 10
+          player2.health.must_equal 10
+          player1.stamina.must_equal 9
+          player2.stamina.must_equal 9
+        end
+      end
+    end
+
+    MoveCode::BASIC_ATTACKS.each do |attack|
+      it "will drain stamina and award a star for defending against: #{attack}" do
+        Exchange.perform(player1, player2, Move.new(MoveCode::DEFEND), Move.new(attack))
+        player1.health.must_equal 10
+        player1.stamina.must_equal 8
+        player1.stars.must_equal 1
+        player2.health.must_equal 10
+      end
+    end
+  end
 end

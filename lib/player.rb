@@ -12,12 +12,21 @@ class Player < JSONable
   end
 
   def dodge!
-    @stamina = @stamina - 1
-    @stamina = [0, @stamina].min, 10
-    @stamina = [10, @stamina].max
+    @stamina -= 1
+    @stamina = [[10, @stamina].min, 0].max
   end
 
   def take_hit!
     @health -= 2
+  end
+
+  def defend!
+    @stamina -= 2
+    @stamina = [[10, @stamina].min, 0].max
+  end
+
+  def award_star!
+    @stars += 1
+    @stars = [[3, @stars].min, 0].max
   end
 end
