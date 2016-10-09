@@ -14,4 +14,8 @@ class Move < JSONable
       MoveCode::RIGHT_BODY_BLOW
     ].include? @move_code
   end
+
+  def illegal?
+    return @move_code.eql? MoveCode::ILLEGAL_MOVE
+  end
 end
